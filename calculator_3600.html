@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <style>
+    h1,
+    h2 {
+      color: red;
+      line-height: 1.3em;
+
+    }
+
+    body {
+      padding-top: 20;
+      font-family: Lucida Console;
+      background: linear-gradient(90deg, #88d3d3, #e2d09f);
+    }
+
+    a {
+      color: blue;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <title>3600 калькулятор</title>
+    <h1>Калькулятор дней по акции 3600</h1>
+    <h3>В диалоговых окнах необходимо ввести актуальные суммы тарифов и текущий баланс абонента. Если услуга не
+      предоставляется - оставить "0" или нажать "отмена". <br>
+      Калькулятор считает сумму списываемую до 1.01.2023 со скидкой 50% (кроме реального IP). <br> Остаток средств
+      считает
+      по
+      стандартному тарифу. </h3>
+
+    <a href="/calculator_3600.html" type="js">Запуск калькулятора (или обновите страницу)</a>
+  </div>
+  <script>
+    'use strict'
+
+    calc3600()
+
+    function calc3600() {
+      const stopDate = new Date(2022, 11, 31);
+      let tarif = 0;
+
+
+      const inpAndTest = (str, defVal) => {
+        let a = prompt(str, defVal) || 0;
+        a = a ? a.match(/\d+/) : 0;
+        return a ? a : defVal
+      }
+
+      while (tarif <= 0) {
+        tarif = inpAndTest('Введите текущий тариф абонента за пакет ТВ/Интернет или ТВ+Интернет', 0)
+      }
+
+      const dopuslugiIptv = inpAndTest('Введите текущий тариф абонента за допуслугу IPTV (если есть)', 0);
+
+      const dopuslugiRealIp = inpAndTest('Введите текущий тариф абонента за допуслугу реального IP (если есть)', 0);
+
+      let balans = +prompt('Введите текущий баланс абонента', 0) + 0 || 0;
+
+      const balansOld = balans;
+      balans += 3600;
+
+      let thisYearLeftDay = Math.ceil((stopDate - Date.now()) / 1000 / 60 / 60 / 24)
+      let thisYearLeftMonth = (new Date(stopDate - Date.now())).getMonth()
+
+      const tarif50 = Math.ceil(tarif / 2)
+      const dopuslugiIptv50 = Math.ceil(dopuslugiIptv / 2)
+
+
+      //списываем деньги до конца года за все услуги по новому тарифу
+      const balans2022 =
+        balans -= (tarif50 / 30 + dopuslugiIptv50 / 30) * thisYearLeftDay + dopuslugiRealIp * thisYearLeftMonth;
+
+
+      //на сколько дней хватит оставшейся суммы по старому тарифу
+      let daysAfter22 = 0;
+      let monthAfter22 = -1;
+
+      while (balans > 0) {
+
+        daysAfter22 += 1;
+
+        if (monthAfter22 <  //списание за реал IP помесячно
+          ((new Date(+stopDate + (daysAfter22 * 24 * 3600 * 1000))).getMonth())) {
+          balans -= dopuslugiRealIp;
+          monthAfter22 += 1;
+        }
+        balans -= tarif / 30 + dopuslugiIptv / 30
+      }
+
+      let formatter1 = new Intl.DateTimeFormat("ru")
+      alert(
+        `Текущий тариф ${tarif} грн/30 дней + Допуслуги:
+IPTV ${dopuslugiIptv} грн/30 дней ----- Real IP ${dopuslugiRealIp} грн/мес
+
+Текущий баланс ${balansOld} грн.
+
+После оплаты на счёт 3600 грн.
+
+Тариф ${tarif50} грн/30 дней  + Допуслуги:
+IPTV ${dopuslugiIptv50} грн/30 дней ----- RealIP ${dopuslugiRealIp} грн/мес
+
+Cпишется ${Math.round(balansOld + 3600 - balans2022)} грн. за ${thisYearLeftDay} дней до конца 2022 года.
+Остаток баланса в конце года: ${Math.round(balans2022)} грн. 
+
+При текущем тарифе этой суммы хватит ещё на  ${daysAfter22} дней до ${formatter1.format((new Date(stopDate.getTime()
+          + (daysAfter22 * 24 * 3600 * 1000))))}
+
+Всего услуга будет работать ${thisYearLeftDay + daysAfter22} дней.
+
+`)
+    }
+  </script>
+</body>
+
+</html>
