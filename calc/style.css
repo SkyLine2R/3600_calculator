@@ -85,6 +85,10 @@ p {
   color: #302c34;
 }
 
+.fail {
+  color: red;
+}
+
 .main {
   background: linear-gradient(
     180deg,
