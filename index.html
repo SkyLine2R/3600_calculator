@@ -2,43 +2,69 @@
 <html lang="ru">
 
 <head>
-  <style>
-    h1,
-    h2 {
-      color: red;
-      line-height: 1.3em;
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap&subset=cyrillic" rel="stylesheet" />
+  <link rel="stylesheet" href="calc/normalize.css" />
+  <link rel="stylesheet" href="calc/style.css" />
 
-    }
-
-    body {
-      padding-top: 20;
-      font-family: Lucida Console;
-      background: linear-gradient(90deg, #88d3d3, #e2d09f);
-    }
-
-    a {
-      color: blue;
-    }
-  </style>
 </head>
 
 <body>
-  <div>
+  <div class="promo">
     <title>3600 калькулятор</title>
     <h1>Калькулятор дней по акции 3600</h1>
-    <h3>В диалоговых окнах необходимо ввести актуальные суммы тарифов и текущий баланс абонента. Если услуга не
+    <p class="promo-text">В диалоговых окнах необходимо ввести актуальные суммы тарифов и текущий баланс абонента. Если
+      услуга не
       предоставляется - оставить "0" или нажать "отмена". <br>
       Калькулятор считает сумму списываемую до 1.01.2023 со скидкой 50% (кроме реального IP). <br> Остаток средств
       считает
       по
-      стандартному тарифу. </h3>
+      стандартному тарифу. </p>
+    <button class="button button-cart" id="cart-button">
+      <span class="button-cart-svg"></span>
+      <span class="button-text">Калькулятор 3600</span>
+    </button>
+    <a class="button" type="js">Запуск калькулятора</a>
 
-    <a href="3600_calculator.html" type="js">Запуск калькулятора (или обновите страницу)</a>
+    <div>
+      <h3>Результаты расчётов:</h3>
+      <div id="calc-result"></div>
+    </div>
+
   </div>
+
   <script>
     'use strict'
 
-    calc3600()
+    let calcResult = document.getElementById('calc-result')
+
+    document.querySelector('a').onclick = function () {
+      calc3600();
+    }
+
+
+    //аналогично
+    /*     document.querySelector('p').onclick = function () {
+          alert('Ouch! Stop poking me!');
+        }  //аналогично
+     */
+    /* var myHTML = document.querySelector('html');
+      myHTML.onclick = function () { };
+ */
+    /*   var myHeading = document.querySelector('h1');
+      myHeading.textContent = 'Hello world!'; */
+
+    /*   var myImage = document.querySelector('img');
+    
+      myImage.onclick = function () {
+        var mySrc = myImage.getAttribute('src');
+        if (mySrc === 'images/firefox-icon.png') {
+          myImage.setAttribute('src', 'images/firefox2.png');
+        } else {
+          myImage.setAttribute('src', 'images/firefox-icon.png');
+        }
+      }
+     */
+    //calc3600()
 
     function calc3600() {
       const stopDate = new Date(2022, 11, 31);
@@ -53,6 +79,7 @@
 
       while (tarif <= 0) {
         tarif = inpAndTest('Введите текущий тариф абонента за пакет ТВ/Интернет или ТВ+Интернет', 0)
+
       }
 
       const dopuslugiIptv = inpAndTest('Введите текущий тариф абонента за допуслугу IPTV (если есть)', 0);
@@ -93,28 +120,69 @@
       }
 
       let formatter1 = new Intl.DateTimeFormat("ru")
-      alert(
-        `Текущий тариф ${tarif} грн/30 дней + Допуслуги:
-IPTV ${dopuslugiIptv} грн/30 дней ----- Real IP ${dopuslugiRealIp} грн/мес
 
-Текущий баланс ${balansOld} грн.
+      function addTag(tag, str) {
+        return `<${tag}>${str}</${tag}>`
+      }
 
-После оплаты на счёт 3600 грн.
+      let stringHtml = addTag('p', `Текущий тариф ${tarif} грн/30 дней`)
+        .concat((dopuslugiIptv != 0 || dopuslugiRealIp != 0) ? addTag('h4', 'Дополнительные слуги:') : '')
+        .concat((dopuslugiIptv != 0) ? addTag('p', `<b>IPTV:</b> ${dopuslugiIptv} грн/30 дней`) : '')
+        .concat((dopuslugiRealIp != 0) ? addTag('p', `<b>Real IP:</b> ${dopuslugiRealIp} грн / мес`) : '')
+        .concat(addTag('p', `Текущий баланс ${balansOld} грн.`))
+        .concat(addTag('h3', 'После оплаты на счёт 3600 грн.:'))
+        .concat(addTag('p', `Тариф ${tarif50} грн / 30 дней`))
+        .concat((dopuslugiIptv50 != 0 || dopuslugiRealIp != 0) ? addTag('h4', 'Дополнительные слуги:') : '')
+        .concat((dopuslugiIptv50 != 0) ? addTag('p', `<b>IPTV:</b> ${dopuslugiIptv50} грн/30 дней`) : '')
+        .concat((dopuslugiRealIp != 0) ? addTag('p', `<b>Real IP:</b> ${dopuslugiRealIp} грн / мес`) : '')
+        .concat(addTag('p', `Cпишется ${Math.round(balansOld + 3600 - balans2022)} грн.за ${thisYearLeftDay} дней до конца 2022 года. Остаток баланса в конце года: <b> ${Math.round(balans2022)} грн.</b>`))
+        .concat(addTag('p', `При текущем тарифе этой суммы хватит ещё на <b> ${daysAfter22} </b> дней до <b>${formatter1.format((new Date(stopDate.getTime() + (daysAfter22 * 24 * 3600 * 1000))))}</b>`))
+        .concat(addTag('p', `Всего услуга будет работать ${thisYearLeftDay + daysAfter22} дней.`))
 
-Тариф ${tarif50} грн/30 дней  + Допуслуги:
-IPTV ${dopuslugiIptv50} грн/30 дней ----- RealIP ${dopuslugiRealIp} грн/мес
 
-Cпишется ${Math.round(balansOld + 3600 - balans2022)} грн. за ${thisYearLeftDay} дней до конца 2022 года.
-Остаток баланса в конце года: ${Math.round(balans2022)} грн. 
 
-При текущем тарифе этой суммы хватит ещё на  ${daysAfter22} дней до ${formatter1.format((new Date(stopDate.getTime()
-          + (daysAfter22 * 24 * 3600 * 1000))))}
+      //alert(stringHtml);
 
-Всего услуга будет работать ${thisYearLeftDay + daysAfter22} дней.
 
-`)
+      calcResult.innerHTML = stringHtml;
+
     }
+
+
+
+
+
+
+
+    /*
+            `<p>Текущий тариф ${tarif} грн/30 дней</p>
+                 <h4>+ Допуслуги:</h4>
+             }
+         IPTV ${dopuslugiIptv} грн / 30 дней----- Real IP ${dopuslugiRealIp} грн / мес
+         
+         Текущий баланс ${balansOld} грн.
+         
+         После оплаты на счёт 3600 грн.
+         
+         Тариф ${tarif50} грн / 30 дней + Допуслуги:
+         IPTV ${dopuslugiIptv50} грн / 30 дней----- RealIP ${dopuslugiRealIp} грн / мес
+         
+         Cпишется ${Math.round(balansOld + 3600 - balans2022)} грн.за ${thisYearLeftDay} дней до конца 2022 года.
+         Остаток баланса в конце года: ${Math.round(balans2022)} грн. 
+         
+         При текущем тарифе этой суммы хватит ещё на  ${daysAfter22} дней до ${formatter1.format((new Date(stopDate.getTime()
+              + (daysAfter22 * 24 * 3600 * 1000))))
+              }
+         
+         Всего услуга будет работать ${thisYearLeftDay + daysAfter22} дней.
+         
+         ` */
+
   </script>
 </body>
+<footer>
+
+</footer>
+
 
 </html>
