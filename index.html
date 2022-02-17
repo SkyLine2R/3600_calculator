@@ -5,70 +5,78 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap&subset=cyrillic" rel="stylesheet" />
   <link rel="stylesheet" href="calc/normalize.css" />
   <link rel="stylesheet" href="calc/style.css" />
+  <title>3600 калькулятор</title>
 
 </head>
 
 <body>
-  <div class="promo">
-    <title>3600 калькулятор</title>
-    <h1>Калькулятор дней по акции 3600</h1>
-    <p class="promo-text">В диалоговых окнах необходимо ввести актуальные суммы тарифов и текущий баланс абонента. Если
-      услуга не
-      предоставляется - оставить "0" или нажать "отмена". <br>
-      Калькулятор считает сумму списываемую до 1.01.2023 со скидкой 50% (кроме реального IP). <br> Остаток средств
-      считает
-      по
-      стандартному тарифу. </p>
-    <button class="button button-cart" id="cart-button">
-      <span class="button-cart-svg"></span>
-      <span class="button-text">Калькулятор 3600</span>
-    </button>
-    <a class="button" type="js">Запуск калькулятора</a>
-
+  <header class="header">
     <div>
-      <h3>Результаты расчётов:</h3>
-      <div id="calc-result"></div>
+
     </div>
+  </header>
 
+  <div class="container bg-a">
+
+    <div class="main">
+      <h1>Калькулятор акции "3600"</h1>
+      <p class="main-text">Калькулятор позволяет быстро расчитать на какой период хватит абоненту суммы оплаченной по
+        акции 3600. </p>
+      <p class="main-text">В поля формы необходимо ввести актуальные суммы тарифов и текущий баланс абонента. Если
+        какая-то услуга не предоставляется - оставить поле пустым или установить "0". </p>
+      <p class="main-text">Калькулятор считает сумму списываемую до 1.01.2023 со скидкой 50% (кроме реального IP).
+        <br> Списания с 1.01.2023 считаются по текущему тарифу.
+      </p>
+
+      <form id="form">
+
+        <hr />
+        <h4>Основная услуга:</h4>
+        <p class="input">Текущий тариф (стоимость за 30 дней):
+          <input id="tarif" class="input-field" autofocus type="number" min="75" max="1000" placeholder="100" required
+            size="4" value="199" title="Обязательно для заполнения">
+        </p>
+        <hr />
+        <h4>Дополнительные услуги:</h4>
+        <p class="input">Текущий тариф IPTV (стоимость за 30 дней):
+          <input id="dopuslugiIptv" class="input-field" autofocus type="number" min="0" max="1000" placeholder="0"
+            required size="4" value="0" title="Можно оставить пустым или ввести &#8220;0&#8220;">
+        </p>
+        <p class="input">Тариф реальный IP (стоимость за 1 месяц):
+          <input id="dopuslugiRealIp" class="input-field" autofocus type="number" min="0" max="1000" placeholder="0"
+            required size="4" value="0" title="Можно оставить пустым или ввести &#8220;0&#8220;">
+        </p>
+        <hr />
+        <h4>Состояние счёта:</h4>
+        <p class="input">Текущий баланс абонента:
+          <input id="balans" class="input-field" autofocus type="number" min="-999" max="9999" placeholder="0" required
+            size="4" value="0" title="Можно оставить пустым или ввести &#8220;0&#8220;">
+        </p>
+
+      </form>
+
+      <a class="button" type="js">Подcчитать</a>
+
+      <div>
+        <h3>Результат:</h3>
+        <div id="calc-result"></div>
+      </div>
+
+    </div class="footer">
+    <p class="footer-link">SkyLineR 2022</p>
   </div>
-
   <script>
     'use strict'
 
-    let calcResult = document.getElementById('calc-result')
+    let calcResult = document.getElementById('calc-result') //элемент куда будем выводить результат
 
-    document.querySelector('a').onclick = function () {
+    document.querySelector('a').onclick = () => {
       calc3600();
     }
 
-
-    //аналогично
-    /*     document.querySelector('p').onclick = function () {
-          alert('Ouch! Stop poking me!');
-        }  //аналогично
-     */
-    /* var myHTML = document.querySelector('html');
-      myHTML.onclick = function () { };
- */
-    /*   var myHeading = document.querySelector('h1');
-      myHeading.textContent = 'Hello world!'; */
-
-    /*   var myImage = document.querySelector('img');
-    
-      myImage.onclick = function () {
-        var mySrc = myImage.getAttribute('src');
-        if (mySrc === 'images/firefox-icon.png') {
-          myImage.setAttribute('src', 'images/firefox2.png');
-        } else {
-          myImage.setAttribute('src', 'images/firefox-icon.png');
-        }
-      }
-     */
-    //calc3600()
-
     function calc3600() {
       const stopDate = new Date(2022, 11, 31);
-      let tarif = 0;
+      let tarif = +form.tarif.value;
 
 
       const inpAndTest = (str, defVal) => {
@@ -77,16 +85,15 @@
         return a ? a : defVal
       }
 
-      while (tarif <= 0) {
-        tarif = inpAndTest('Введите текущий тариф абонента за пакет ТВ/Интернет или ТВ+Интернет', 0)
-
+      if (tarif <= 0) {
+        alert('Неправильные данные в поле "основная услуга"')
       }
 
-      const dopuslugiIptv = inpAndTest('Введите текущий тариф абонента за допуслугу IPTV (если есть)', 0);
+      const dopuslugiIptv = (+form.dopuslugiIptv.value) ? +form.dopuslugiIptv.value : 0
 
-      const dopuslugiRealIp = inpAndTest('Введите текущий тариф абонента за допуслугу реального IP (если есть)', 0);
+      const dopuslugiRealIp = (+form.dopuslugiRealIp.value) ? +form.dopuslugiRealIp.value : 0
 
-      let balans = +prompt('Введите текущий баланс абонента', 0) + 0 || 0;
+      let balans = (0 + form.balans.value) ? +form.balans.value : 0
 
       const balansOld = balans;
       balans += 3600;
@@ -129,13 +136,13 @@
         .concat((dopuslugiIptv != 0 || dopuslugiRealIp != 0) ? addTag('h4', 'Дополнительные слуги:') : '')
         .concat((dopuslugiIptv != 0) ? addTag('p', `<b>IPTV:</b> ${dopuslugiIptv} грн/30 дней`) : '')
         .concat((dopuslugiRealIp != 0) ? addTag('p', `<b>Real IP:</b> ${dopuslugiRealIp} грн / мес`) : '')
-        .concat(addTag('p', `Текущий баланс ${balansOld} грн.`))
+        .concat(addTag('p', `Текущий баланс ${balansOld} грн.<hr />`))
         .concat(addTag('h3', 'После оплаты на счёт 3600 грн.:'))
         .concat(addTag('p', `Тариф ${tarif50} грн / 30 дней`))
         .concat((dopuslugiIptv50 != 0 || dopuslugiRealIp != 0) ? addTag('h4', 'Дополнительные слуги:') : '')
         .concat((dopuslugiIptv50 != 0) ? addTag('p', `<b>IPTV:</b> ${dopuslugiIptv50} грн/30 дней`) : '')
         .concat((dopuslugiRealIp != 0) ? addTag('p', `<b>Real IP:</b> ${dopuslugiRealIp} грн / мес`) : '')
-        .concat(addTag('p', `Cпишется ${Math.round(balansOld + 3600 - balans2022)} грн.за ${thisYearLeftDay} дней до конца 2022 года. Остаток баланса в конце года: <b> ${Math.round(balans2022)} грн.</b>`))
+        .concat(addTag('p', `Cпишется ${Math.round(balansOld + 3600 - balans2022)} грн за ${thisYearLeftDay} дней до конца 2022 года. <br> Остаток баланса в конце года: <b> ${Math.round(balans2022)} грн.</b><hr />`))
         .concat(addTag('p', `При текущем тарифе этой суммы хватит ещё на <b> ${daysAfter22} </b> дней до <b>${formatter1.format((new Date(stopDate.getTime() + (daysAfter22 * 24 * 3600 * 1000))))}</b>`))
         .concat(addTag('p', `Всего услуга будет работать ${thisYearLeftDay + daysAfter22} дней.`))
 
