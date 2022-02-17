@@ -3,8 +3,6 @@
 
 <head>
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap&subset=cyrillic" rel="stylesheet" />
-  <link rel="stylesheet" href="calc/normalize.css" />
-  <link rel="stylesheet" href="calc/style.css" />
 
 </head>
 
@@ -139,44 +137,9 @@
         .concat(addTag('p', `При текущем тарифе этой суммы хватит ещё на <b> ${daysAfter22} </b> дней до <b>${formatter1.format((new Date(stopDate.getTime() + (daysAfter22 * 24 * 3600 * 1000))))}</b>`))
         .concat(addTag('p', `Всего услуга будет работать ${thisYearLeftDay + daysAfter22} дней.`))
 
-
-
-      //alert(stringHtml);
-
-
       calcResult.innerHTML = stringHtml;
 
     }
-
-
-
-
-
-
-
-    /*
-            `<p>Текущий тариф ${tarif} грн/30 дней</p>
-                 <h4>+ Допуслуги:</h4>
-             }
-         IPTV ${dopuslugiIptv} грн / 30 дней----- Real IP ${dopuslugiRealIp} грн / мес
-         
-         Текущий баланс ${balansOld} грн.
-         
-         После оплаты на счёт 3600 грн.
-         
-         Тариф ${tarif50} грн / 30 дней + Допуслуги:
-         IPTV ${dopuslugiIptv50} грн / 30 дней----- RealIP ${dopuslugiRealIp} грн / мес
-         
-         Cпишется ${Math.round(balansOld + 3600 - balans2022)} грн.за ${thisYearLeftDay} дней до конца 2022 года.
-         Остаток баланса в конце года: ${Math.round(balans2022)} грн. 
-         
-         При текущем тарифе этой суммы хватит ещё на  ${daysAfter22} дней до ${formatter1.format((new Date(stopDate.getTime()
-              + (daysAfter22 * 24 * 3600 * 1000))))
-              }
-         
-         Всего услуга будет работать ${thisYearLeftDay + daysAfter22} дней.
-         
-         ` */
 
   </script>
 </body>
