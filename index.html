@@ -12,12 +12,9 @@
 <body>
   <header class="header">
     <div>
-
     </div>
   </header>
-
   <div class="container bg-a">
-
     <div class="main">
       <h1>Калькулятор акции "3600"</h1>
       <p class="main-text">Калькулятор позволяет быстро расчитать на какой период хватит абоненту суммы оплаченной по
@@ -27,9 +24,7 @@
       <p class="main-text">Калькулятор считает сумму списываемую до 1.01.2023 со скидкой 50% (кроме реального IP).
         <br> Списания с 1.01.2023 считаются по текущему тарифу.
       </p>
-
       <form id="form">
-
         <hr />
         <h4>Основная услуга:</h4>
         <p class="input">Текущий тариф (стоимость за 30 дней):
@@ -52,16 +47,12 @@
           <input id="balans" class="input-field" autofocus type="number" min="-999" max="9999" placeholder="0" required
             size="4" value="0" title="Можно оставить пустым или ввести &#8220;0&#8220;">
         </p>
-
       </form>
-
       <a class="button" type="js">Подcчитать</a>
-
       <div>
         <h3>Результат:</h3>
         <div id="calc-result"></div>
       </div>
-
     </div class="footer">
     <p class="footer-link">SkyLineR 2022</p>
   </div>
@@ -77,7 +68,6 @@
     function calc3600() {
       const stopDate = new Date(2022, 11, 31);
       let tarif = +form.tarif.value;
-
 
       const inpAndTest = (str, defVal) => {
         let a = prompt(str, defVal) || 0;
@@ -104,11 +94,9 @@
       const tarif50 = Math.ceil(tarif / 2)
       const dopuslugiIptv50 = Math.ceil(dopuslugiIptv / 2)
 
-
       //списываем деньги до конца года за все услуги по новому тарифу
       const balans2022 =
         balans -= (tarif50 / 30 + dopuslugiIptv50 / 30) * thisYearLeftDay + dopuslugiRealIp * thisYearLeftMonth;
-
 
       //на сколько дней хватит оставшейся суммы по старому тарифу
       let daysAfter22 = 0;
@@ -125,13 +113,11 @@
         }
         balans -= tarif / 30 + dopuslugiIptv / 30
       }
-
       let formatter1 = new Intl.DateTimeFormat("ru")
 
       function addTag(tag, str) {
         return `<${tag}>${str}</${tag}>`
       }
-
       let stringHtml = addTag('p', `Текущий тариф ${tarif} грн/30 дней`)
         .concat((dopuslugiIptv != 0 || dopuslugiRealIp != 0) ? addTag('h4', 'Дополнительные слуги:') : '')
         .concat((dopuslugiIptv != 0) ? addTag('p', `<b>IPTV:</b> ${dopuslugiIptv} грн/30 дней`) : '')
@@ -145,16 +131,8 @@
         .concat(addTag('p', `Cпишется ${Math.round(balansOld + 3600 - balans2022)} грн за ${thisYearLeftDay} дней до конца 2022 года. <br> Остаток баланса в конце года: <b> ${Math.round(balans2022)} грн.</b><hr />`))
         .concat(addTag('p', `При текущем тарифе этой суммы хватит ещё на <b> ${daysAfter22} </b> дней до <b>${formatter1.format((new Date(stopDate.getTime() + (daysAfter22 * 24 * 3600 * 1000))))}</b>`))
         .concat(addTag('p', `Всего услуга будет работать ${thisYearLeftDay + daysAfter22} дней.`))
-
       calcResult.innerHTML = stringHtml;
-
     }
-
   </script>
 </body>
-<footer>
-
-</footer>
-
-
 </html>
