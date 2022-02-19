@@ -33,7 +33,7 @@
         <hr />
         <h4>Основная услуга:</h4>
         <p class="input">Текущий тариф (стоимость за 30 дней):
-          <input id="tarif" class="input-field" autofocus type="number" min="75" max="1000" placeholder="100" required
+          <input id="tarif" class="input-field" autofocus type="number" min="45" max="600" placeholder="100" required
             size="4" value="199" title="Обязательно для заполнения">
         </p>
         <hr />
@@ -85,7 +85,7 @@
         return a ? a : defVal
       }
 
-      if (tarif <= 0 || tarif > 400) {
+      if (tarif <= 0 || tarif > 600) {
         calcResult.innerHTML = '<p class="fail">Неправильные данные в поле "основная услуга"</p>';
         return
       }
@@ -154,17 +154,17 @@
         return `<${tag}>${str}</${tag}>`
       }
 
-      let stringHtml = addTag('p', `Текущий тариф ${tarif} грн/30 дней`)
+      let stringHtml = addTag('p', `Текущий тариф ${tarif} грн / 30 дней`)
         .concat((dopuslugiIptv != 0 || dopuslugiRealIp != 0) ? addTag('h4', 'Дополнительные слуги:') : '')
-        .concat((dopuslugiIptv != 0) ? addTag('p', `<b>IPTV:</b> ${dopuslugiIptv} грн/30 дней`) : '')
+        .concat((dopuslugiIptv != 0) ? addTag('p', `<b>IPTV:</b> ${dopuslugiIptv} грн / 30 дней`) : '')
         .concat((dopuslugiRealIp != 0) ? addTag('p', `<b>Real IP:</b> ${dopuslugiRealIp} грн / мес`) : '')
         .concat(addTag('p', `Текущий баланс ${balansOld} грн.<hr />`))
         .concat(addTag('h3', 'После оплаты на счёт 3600 грн.:'))
         .concat(addTag('p', `Тариф ${tarif50} грн / 30 дней`))
         .concat((dopuslugiIptv50 != 0 || dopuslugiRealIp != 0) ? addTag('h4', 'Дополнительные слуги:') : '')
-        .concat((dopuslugiIptv50 != 0) ? addTag('p', `<b>IPTV:</b> ${dopuslugiIptv50} грн/30 дней`) : '')
+        .concat((dopuslugiIptv50 != 0) ? addTag('p', `<b>IPTV:</b> ${dopuslugiIptv50} грн / 30 дней`) : '')
         .concat((dopuslugiRealIp != 0) ? addTag('p', `<b>Real IP:</b> ${dopuslugiRealIp} грн / мес`) : '')
-        .concat(addTag('p', `Cпишется ${Math.round(balansOld + 3600 - balans2022)} грн за ${thisYearLeftDay} дней до конца 2022 года. <br> Остаток баланса в конце года: <b> ${Math.round(balans2022)} грн.</b><hr />`))
+        .concat(addTag('p', `Cпишется ${Math.round(balansOld + 3600 - balans2022)} грн за ${thisYearLeftDay} дней до конца 2022 года. <br> <br>Остаток баланса в конце года: <b> ${Math.round(balans2022)} грн.</b><hr />`))
         .concat(addTag('p', `При текущем тарифе этой суммы хватит ещё на <b> ${daysAfter22} </b> дней до <b>${formatter1.format((new Date(stopDate.getTime() + (daysAfter22 * 24 * 3600 * 1000))))}</b>`))
         .concat(addTag('p', `Всего услуга будет работать ${thisYearLeftDay + daysAfter22} дней.`))
 
